@@ -1,5 +1,7 @@
 <?php
 // db.php
+require 'vendor/autoload.php'; // Carregar o autoloader do Composer
+
 use Dotenv\Dotenv;
 
 // Carregar o .env
