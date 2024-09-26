@@ -31,6 +31,7 @@ try {
     $mail->Password = $smtp_pass;  // Senha SMTP
     $mail->SMTPSecure = 'ssl';     // Segurança
     $mail->Port = $smtp_port;      // Porta SMTP
+    $mail->CharSet = 'UTF-8';
 
     // Query para obter as empresas
     $sql = "SELECT nome, email FROM empresas";

@@ -4,7 +4,8 @@
 function getEmailTemplate($nome_empresa)
 {
     return "
-    <html>
+    <html lang='pt-br'>
+    <meta charset='UTF-8'>
     <head>
         <title>Oferta Especial de Gestão de Delivery</title>
         <style>
