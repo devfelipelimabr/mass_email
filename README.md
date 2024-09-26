@@ -1,6 +1,3 @@
-Aqui está um exemplo de um arquivo `README.md` para o seu projeto de envio de e-mails em massa via PHP utilizando PHPMailer e configuração com Hostinger:
-
-```md
 # Mass Email Sender
 
 Este é um projeto PHP de envio em massa de e-mails para empresas, com integração ao servidor SMTP da Hostinger e o uso da biblioteca PHPMailer. Ele permite o envio de e-mails personalizados, extraindo dados como nome e e-mail do banco de dados MySQL e enviando-os com o conteúdo formatado em HTML.
