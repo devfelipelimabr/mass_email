@@ -58,7 +58,7 @@ try {
             $email_empresa = $row['email'];
 
             // Obter o template de e-mail
-            $message = getEmailTemplate($nome_empresa, $empresa_id);
+            $message = getEmailTemplate($nome_empresa, $email_empresa);
 
             // Configurar o remetente e destinatário
             $mail->setFrom($from_email, $from_name);
