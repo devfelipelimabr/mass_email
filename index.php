@@ -1,5 +1,13 @@
 <?php
 // index.php
+require_once 'config.php';
+
+// Verificar se o usuário está logado
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
 include('db.php'); ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -24,7 +32,8 @@ include('db.php'); ?>
 
 <body>
     <div class="container mt-5">
-        <h2>Envio de E-mails em Massa</h2>
+        <h2>Bem-vindo, <?php echo $_SESSION['username']; ?>!</h2>
+        <a href="logout.php" class="btn btn-danger mb-3">Sair</a>
 
         <!-- Spinner -->
         <div id="spinner" class="text-center">
