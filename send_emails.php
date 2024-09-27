@@ -1,4 +1,5 @@
 <?php
+// send_emails.php
 require 'vendor/autoload.php'; // Carregar o autoloader do Composer
 include('db.php');
 include('email_template.php');
@@ -33,17 +34,23 @@ try {
     $mail->Port = $smtp_port;      // Porta SMTP
     $mail->CharSet = 'UTF-8';
 
-    // Query para obter as empresas
-    $sql = "SELECT nome, email FROM empresas";
+    // Query para obter as empresas que cumprem a condição
+    $sql = "
+        SELECT id, nome, email, data_envio
+        FROM empresas
+        WHERE data_envio IS NULL 
+        OR TIMESTAMPDIFF(HOUR, data_envio, NOW()) > 72
+         AND data_delecao IS NULL";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
+            $empresa_id = $row['id'];
             $nome_empresa = $row['nome'];
             $email_empresa = $row['email'];
 
             // Obter o template de e-mail
-            $message = getEmailTemplate($nome_empresa);
+            $message = getEmailTemplate($nome_empresa, $empresa_id);
 
             // Configurar o remetente e destinatário
             $mail->setFrom($from_email, $from_name);
@@ -55,11 +62,20 @@ try {
             $mail->Body    = $message;
 
             // Enviar o e-mail
-            $mail->send();
-            echo "E-mail enviado para: " . $email_empresa . "<br>";
+            if ($mail->send()) {
+                echo "E-mail enviado para: " . $email_empresa . "<br>";
+
+                // Atualizar a data de envio
+                $update_sql = "UPDATE empresas SET data_envio = NOW() WHERE id = ?";
+                $stmt = $conn->prepare($update_sql);
+                $stmt->bind_param("i", $empresa_id);
+                $stmt->execute();
+            } else {
+                echo "Erro ao enviar e-mail para: " . $email_empresa . "<br>";
+            }
         }
     } else {
-        echo "Nenhuma empresa encontrada.";
+        echo "Nenhuma empresa encontrada para enviar e-mails.";
     }
 } catch (Exception $e) {
     echo "Erro ao enviar o e-mail: {$mail->ErrorInfo}";
