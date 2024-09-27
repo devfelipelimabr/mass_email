@@ -71,7 +71,7 @@ Crie uma tabela no MySQL para armazenar as informações das empresas. Execute o
 CREATE TABLE empresas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     data_envio TIMESTAMP NULL DEFAULT NULL,
     data_delecao TIMESTAMP NULL DEFAULT NULL
