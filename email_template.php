@@ -3,6 +3,13 @@
 
 function getEmailTemplate($nome_empresa, $empresa_id)
 {
+    // Captura dinamicamente o domínio atual (com base no servidor onde o script está sendo executado)
+    $host = $_SERVER['HTTP_HOST'];
+
+    // URL completa para a página de desinscrição (ajustar conforme necessário)
+    $unsubscribe_link = "https://$host/mass_email/unsubscribe.php?id=$empresa_id";
+
+    // Template de e-mail com o link de desinscrição dinâmico
     $nome_empresa = $nome_empresa ?? 'Empreendedor(a)';
     return "
     <html lang='pt-br'>
@@ -55,7 +62,7 @@ function getEmailTemplate($nome_empresa, $empresa_id)
             <p>Com o JáVai, você poderá aumentar a eficiência, otimizar seus processos e reduzir os erros no seu delivery.</p>
             <p><a class='btn' href='https://javai.shop/'>Saiba mais</a></p>
             <div class='unsubscribe'>
-                <p>Se não desejar receber mais e-mails, <a href='https://3867-2804-214-11-c073-28e4-72d0-195a-c604.ngrok-free.app/mass_email/unsubscribe.php?id=$empresa_id'>clique aqui para desinscrever-se</a>.</p>
+                <p>Se não desejar receber mais e-mails, <a href='$unsubscribe_link'>clique aqui para desinscrever-se</a>.</p>
             </div>
         </div>
     </body>
