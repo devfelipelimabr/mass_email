@@ -6,11 +6,15 @@ function getEmailTemplate($nome_empresa, $empresa_email)
     // Captura dinamicamente o domínio atual (com base no servidor onde o script está sendo executado)
     $host = $_SERVER['HTTP_HOST'];
 
+    // Se o nome da empresa for vazio, utilize o nome do e-mail, ou um fallback padrão
+    if (empty($nome_empresa)) {
+        $nome_empresa = ucfirst(explode('@', $empresa_email)[0]); // Pega a primeira parte do email e coloca a primeira letra em maiúscula
+    }
+
     // URL completa para a página de desinscrição (ajustar conforme necessário)
     $unsubscribe_link = "https://$host/unsubscribe.php?email=$empresa_email";
 
     // Template de e-mail com o link de desinscrição dinâmico
-    $nome_empresa = $nome_empresa ?? 'Empreendedor(a)';
     return "
     <html lang='pt-br'>
     <meta charset='UTF-8'>
