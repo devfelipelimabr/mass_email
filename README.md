@@ -34,7 +34,7 @@ Este é um projeto PHP de envio em massa de e-mails para empresas, com integraç
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/mass-email-sender.git
+git clone https://github.com/devfelipelimabr/mass_email.git
 cd mass-email-sender
 ```
 
