@@ -86,103 +86,11 @@ No arquivo `send_emails.php`, o PHPMailer já está configurado para enviar e-ma
 
 ### 6. Implementação do Soft Delete (Desinscrição)
 
-Para implementar a desinscrição e o soft delete, você precisará criar um endpoint que processe a solicitação de desinscrição. Crie o arquivo `unsubscribe.php` para realizar o soft delete:
-
-```php
-<?php
-// unsubscribe.php
-include('db.php'); // Conexão com o banco de dados
-
-if (isset($_GET['id'])) {
-    $empresa_id = $_GET['id'];
-
-    // Soft delete: marca a data de deleção
-    $sql = "UPDATE empresas SET data_delecao = NOW() WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param('i', $empresa_id);
-
-    if ($stmt->execute()) {
-        echo "Você foi desinscrito com sucesso.";
-    } else {
-        echo "Erro ao processar sua solicitação de desinscrição.";
-    }
-
-    $stmt->close();
-}
-
-$conn->close();
-?>
-```
+A desinscrição e o soft delete ocorrem no endpoint que processa a solicitação de desinscrição, através do arquivo `unsubscribe.php`.
 
 ### 7. Adicione o Link de Desinscrição ao Template de E-mail
 
-No arquivo `email_template.php`, inclua um link de desinscrição dinâmico para que os usuários possam parar de receber e-mails:
-
-```php
-function getEmailTemplate($nome_empresa, $empresa_id)
-{
-    $host = $_SERVER['HTTP_HOST'];
-    $unsubscribe_link = "https://$host/mass_email/unsubscribe.php?id=$empresa_id";
-
-    return "
-    <html lang='pt-br'>
-    <meta charset='UTF-8'>
-    <head>
-        <title>Oferta Especial de Gestão de Delivery</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f4f4f4;
-                margin: 0;
-                padding: 0;
-            }
-            .container {
-                width: 100%;
-                max-width: 600px;
-                margin: 0 auto;
-                background-color: #ffffff;
-                padding: 20px;
-                border-radius: 5px;
-            }
-            h1 {
-                color: #333;
-                text-transform: capitalize;
-            }
-            p {
-                font-size: 16px;
-                line-height: 1.5;
-            }
-            .btn {
-                display: inline-block;
-                padding: 10px 20px;
-                background-color: #28a745;
-                color: #ffffff;
-                text-decoration: none;
-                border-radius: 5px;
-            }
-            .unsubscribe {
-                margin-top: 20px;
-                font-size: 12px;
-                color: #999;
-            }
-        </style>
-    </head>
-    <body>
-        <div class='container'>
-            <h1>Olá, $nome_empresa!</h1>
-            <p>Estamos animados em apresentar a você o <strong>JáVai – Aplicação de Gestão de Delivery</strong>,
-               que vai transformar a forma como você gerencia suas operações de entrega.</p>
-            <p>Com o JáVai, você poderá aumentar a eficiência, otimizar seus processos e reduzir os erros no seu delivery.</p>
-            <p><a class='btn' href='https://javai.shop/'>Saiba mais</a></p>
-            <div class='unsubscribe'>
-                <p>Se não desejar receber mais e-mails, <a href='$unsubscribe_link'>clique aqui para desinscrever-se</a>.</p>
-            </div>
-        </div>
-    </body>
-    </html>
-    ";
-}
-```
+No arquivo `email_template.php`, inclua um link de desinscrição dinâmico para que os usuários possam parar de receber e-mails.
 
 ### 8. Executar o Script de Envio
 

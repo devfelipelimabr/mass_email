@@ -2,14 +2,14 @@
 // unsubscribe.php
 require 'db.php'; // Conexão com o banco de dados
 
-// Verifica se o 'id' foi passado na URL
-if (isset($_GET['id'])) {
-    $empresa_id = intval($_GET['id']);
+// Verifica se o 'email' foi passado na URL
+if (isset($_GET['email'])) {
+    $empresa_email = intval($_GET['email']);
 
     // Realiza o soft delete, marcando o usuário como desativado
-    $sql = "UPDATE empresas SET data_delecao = NOW() WHERE id = ? AND data_delecao IS NULL";
+    $sql = "UPDATE empresas SET data_delecao = NOW() WHERE email = ? AND data_delecao IS NULL";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $empresa_id);
+    $stmt->bind_param("s", $empresa_email);
 
     if ($stmt->execute()) {
         echo "Você foi desinscrito com sucesso. Você não receberá mais e-mails.";
@@ -19,7 +19,7 @@ if (isset($_GET['id'])) {
 
     $stmt->close();
 } else {
-    echo "ID de empresa inválido.";
+    echo "EMAIL de empresa inválido.";
 }
 
 $conn->close();
