@@ -51,12 +51,12 @@ composer install
 Crie um arquivo `.env` na raiz do projeto e adicione suas credenciais SMTP:
 
 ```env
-SMTP_HOST=smtp.hostinger.com
+SMTP_HOST=smtp.dominio.com
 SMTP_PORT=587
 SMTP_USER=seuemail@dominio.com
 SMTP_PASS=sua_senha
 FROM_EMAIL=seuemail@dominio.com
-FROM_NAME="JáVai Delivery"
+FROM_NAME="Sua Empresa"
 ```
 
 ### 4. Configuração do Banco de Dados
@@ -202,6 +202,7 @@ mass-email-sender/
 ├── .env.example             # Exemplo do arquivo .env
 ├── composer.json            # Dependências do Composer
 ├── email_template.php       # Template HTML do e-mail
+├── index.php                # Frontend
 ├── send_emails.php          # Script principal para enviar e-mails
 ├── unsubscribe.php          # Endpoint de desinscrição
 ├── README.md                # Documentação do projeto
