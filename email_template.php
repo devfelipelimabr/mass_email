@@ -7,7 +7,7 @@ function getEmailTemplate($nome_empresa, $empresa_email)
     $host = $_SERVER['HTTP_HOST'];
 
     // URL completa para a página de desinscrição (ajustar conforme necessário)
-    $unsubscribe_link = "https://$host/mass_email/unsubscribe.php?email=$empresa_email";
+    $unsubscribe_link = "https://$host/unsubscribe.php?email=$empresa_email";
 
     // Template de e-mail com o link de desinscrição dinâmico
     $nome_empresa = $nome_empresa ?? 'Empreendedor(a)';
