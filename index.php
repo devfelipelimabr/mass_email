@@ -1,4 +1,6 @@
-<?php include('db.php'); ?>
+<?php
+// index.php
+include('db.php'); ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -6,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Envio de E-mails em Massa</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         /* Ocultar o spinner inicialmente */
@@ -31,18 +33,39 @@
             </div>
         </div>
 
-        <form id="emailForm" action="send_emails.php" method="POST">
+        <form id="emailForm">
             <button type="submit" id="submitButton" class="btn btn-primary">Enviar E-mails</button>
         </form>
+
+        <div id="emailStatus" class="mt-3"></div> <!-- Div para exibir o status -->
     </div>
 
     <script>
         $(document).ready(function() {
-            $('#emailForm').on('submit', function() {
+            $('#emailForm').on('submit', function(e) {
+                e.preventDefault();
+
                 // Desativar o botão de enviar
                 $('#submitButton').prop('disabled', true);
                 // Mostrar o spinner
                 $('#spinner').show();
+
+                // Enviar requisição Ajax para iniciar o envio de e-mails
+                $.ajax({
+                    url: 'send_emails.php',
+                    method: 'POST',
+                    xhrFields: {
+                        onprogress: function(e) {
+                            // Atualizar o progresso com os dados recebidos do PHP
+                            $('#emailStatus').append(e.target.responseText);
+                        }
+                    },
+                    success: function(response) {
+                        // Esconder o spinner após o término
+                        $('#spinner').hide();
+                        $('#submitButton').prop('disabled', false);
+                    }
+                });
             });
         });
     </script>

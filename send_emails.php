@@ -23,24 +23,32 @@ $from_name = $_ENV['FROM_NAME'];
 // Criação do PHPMailer
 $mail = new PHPMailer(true);
 
+// Desabilitar cache de saída para envio contínuo
+header('Content-Type: text/html; charset=UTF-8');
+header('Cache-Control: no-cache');
+header('X-Accel-Buffering: no'); // Para Nginx
+
+ob_implicit_flush(true);
+ob_end_flush();
+
 try {
     // Configurações do servidor
     $mail->isSMTP();
-    $mail->Host = $smtp_host;  // Servidor SMTP
-    $mail->SMTPAuth = true;    // Ativar autenticação SMTP
-    $mail->Username = $smtp_user;  // Usuário SMTP
-    $mail->Password = $smtp_pass;  // Senha SMTP
-    $mail->SMTPSecure = 'ssl';     // Segurança
-    $mail->Port = $smtp_port;      // Porta SMTP
+    $mail->Host = $smtp_host;
+    $mail->SMTPAuth = true;
+    $mail->Username = $smtp_user;
+    $mail->Password = $smtp_pass;
+    $mail->SMTPSecure = 'ssl';
+    $mail->Port = $smtp_port;
     $mail->CharSet = 'UTF-8';
 
-    // Query para obter as empresas que cumprem a condição
+    // Query para obter as empresas
     $sql = "
         SELECT id, nome, email, data_envio
         FROM empresas
         WHERE data_envio IS NULL 
         OR TIMESTAMPDIFF(HOUR, data_envio, NOW()) > 72
-         AND data_delecao IS NULL";
+        AND data_delecao IS NULL";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -59,23 +67,26 @@ try {
             // Conteúdo do e-mail
             $mail->isHTML(true);
             $mail->Subject = 'Aumente a eficiência do seu delivery com o JáVai!';
-            $mail->Body    = $message;
+            $mail->Body = $message;
 
             // Enviar o e-mail
             if ($mail->send()) {
                 echo "E-mail enviado para: " . $email_empresa . "<br>";
-
-                // Atualizar a data de envio
-                $update_sql = "UPDATE empresas SET data_envio = NOW() WHERE id = ?";
-                $stmt = $conn->prepare($update_sql);
-                $stmt->bind_param("i", $empresa_id);
-                $stmt->execute();
             } else {
                 echo "Erro ao enviar e-mail para: " . $email_empresa . "<br>";
             }
+
+            // Atualizar a data de envio
+            $update_sql = "UPDATE empresas SET data_envio = NOW() WHERE id = ?";
+            $stmt = $conn->prepare($update_sql);
+            $stmt->bind_param("i", $empresa_id);
+            $stmt->execute();
+
+            // Enviar saída imediatamente
+            flush();
         }
     } else {
-        echo "Nenhuma empresa encontrada para enviar e-mails.";
+        echo "Nenhuma empresa encontrada para enviar e-mails.<br>";
     }
 } catch (Exception $e) {
     echo "Erro ao enviar o e-mail: {$mail->ErrorInfo}";
