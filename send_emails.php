@@ -1,5 +1,11 @@
 <?php
 // send_emails.php
+require_once 'config.php';
+// Verificar se o usuário está logado
+if (!isset($_SESSION['user_id'])) {
+    die("Acesso não autorizado");
+}
+
 require 'vendor/autoload.php'; // Carregar o autoloader do Composer
 include('db.php');
 include('email_template.php');
