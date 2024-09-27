@@ -3,6 +3,7 @@
 
 function getEmailTemplate($nome_empresa)
 {
+    $nome_empresa = $nome_empresa ?? 'Empreendedor(a)';
     return "
     <html lang='pt-br'>
     <meta charset='UTF-8'>
@@ -25,6 +26,7 @@ function getEmailTemplate($nome_empresa)
             }
             h1 {
                 color: #333;
+                text-transform: capitalize;
             }
             p {
                 font-size: 16px;
